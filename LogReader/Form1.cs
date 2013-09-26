@@ -17,86 +17,140 @@ namespace LogReader
         public Form1()
         {
             InitializeComponent();
-            List<FileInfo> files = new DirectoryInfo("c:\\Temp\\").GetFiles("*.txt").OrderBy(p => p.CreationTime).ToList();
-            DateTime latest = DateTime.MinValue;
-            string defaultfile = string.Empty;
-            foreach (FileInfo file in files)
+            try
             {
-                string filePath = file.FullName;
-                filesListBox.Items.Add(Path.GetFileNameWithoutExtension(filePath));
-                DateTime time = File.GetLastWriteTime(filePath);
-                if (time > latest)
+                //Get the files from directory
+                string[] extensions = new[] { ".txt", ".log" };
+                FileInfo[] files = new DirectoryInfo("c:\\Temp\\").GetFiles()
+                                                                  .Where(p => extensions.Contains(p.Extension.ToLower()))
+                                                                  .OrderByDescending(p => p.LastWriteTime)
+                                                                  .ToArray();
+                
+                //Open the newest file
+                OpenFile(Path.GetFileName(files.First().FullName));
+
+                //Add filenames to ListBox
+                foreach (FileInfo file in files)
                 {
-                    latest = time;
-                    defaultfile = filePath;
+                    filesListBox.Items.Add(Path.GetFileName(file.FullName));
                 }
             }
-            OpenFile(Path.GetFileNameWithoutExtension(defaultfile));
+            catch
+            {
+                MessageBox.Show("Érvénytelen elérési út");
+            }
         }
 
         private void OpenFile(string fileName)
         {
-            string line = string.Empty;
-            dataGridView1.Rows.Clear();
-
-            //open the Log file for reading
-            TextReader reader = new StreamReader(File.OpenRead(@"c:\Temp\" + fileName + ".txt"));
-            string file = reader.ReadToEnd();
-            if (file.StartsWith("<"))
+            try
             {
-                string xmlString = string.Join("", new String[] { "<Log>", file, "</Log>" });
-                XmlDocument xml = new XmlDocument();
-                xml.LoadXml(xmlString);
-                XmlNodeList list = xml.SelectNodes("Log/LogInfo");
-                XmlNodeList listerror = xml.SelectNodes("Log/LogErrorInfo");
+                dataGridView1.ScrollBars = ScrollBars.None;
+                dataGridView1.Rows.Clear();
+                dataGridView1.ScrollBars = ScrollBars.Both;
 
-
-                List<LogInfo> logs = new List<LogInfo>();
-
-                foreach (XmlNode node in list)
+                //Open the Log file for reading
+                try
                 {
-                    LogInfo log = new LogInfo();
-                    //log.Time = DateTime.Parse(node.Attributes["Time"].Value);
-                    log.Time = node.Attributes["Time"].Value;
-                    if (node.Attributes["ProcessID"] != null)
-                        log.ProcessId = node.Attributes["ProcessID"].Value;
-                    if (node.SelectSingleNode("Message") != null)
-                        log.Message = node.SelectSingleNode("Message").InnerText;
-                    else if (node.SelectSingleNode("Entry") != null)
-                        log.Message = node.SelectSingleNode("Entry").InnerText;
-                    logs.Add(log);
+                    TextReader reader = new StreamReader(File.OpenRead(@"c:\Temp\" + fileName));
+                    string file = reader.ReadToEnd();
+                    if (file.StartsWith("<"))
+                    {
+                        string xmlString = string.Join("", new String[] { "<Log>", file, "</Log>" });
+                        XmlDocument xml = new XmlDocument();
+                        List<LogInfo> logs = new List<LogInfo>();
 
-                    dataGridView1.Rows.Add("", log.Time, log.ProcessId, log.Namespace, log.Message, log.Stacktrace);
+                        //Get nodes
+                        xml.LoadXml(xmlString);
+                        XmlNodeList list = xml.SelectNodes("Log/LogInfo");
+                        XmlNodeList listerror = xml.SelectNodes("Log/LogErrorInfo");
+
+                        //Process LogInfo
+                        foreach (XmlNode node in list)
+                        {
+                            LogInfo log = new LogInfo();
+                            log.Time = node.Attributes["Time"].Value;
+                            if (node.Attributes["ProcessID"] != null)
+                                log.ProcessId = node.Attributes["ProcessID"].Value;
+                            //There could be either Entry or Message in a LogInfo
+                            if (node.SelectSingleNode("Message") != null)
+                                log.Message = node.SelectSingleNode("Message").InnerText;
+                            else if (node.SelectSingleNode("Entry") != null)
+                                log.Message = node.SelectSingleNode("Entry").InnerText;
+                            logs.Add(log);
+
+                            dataGridView1.Rows.Add( "",
+                                                    log.Time,
+                                                    log.ProcessId,
+                                                    log.Namespace,
+                                                    log.Message,
+                                                    log.Stacktrace,
+                                                    "",
+                                                    "");
+                        }
+
+                        //Process LogErrorInfo
+                        foreach (XmlNode node in listerror)
+                        {
+                            LogInfo log = new LogInfo();
+                            log.Time = node.Attributes["Time"].Value;
+                            if (node.Attributes["ProcessID"] != null)
+                                log.ProcessId = node.Attributes["ProcessID"].Value;
+                            if (node.SelectSingleNode("Namespace") != null)
+                                log.Namespace = node.SelectSingleNode("Namespace").InnerText;
+                            //There could be either Entry or Message in a LogInfo
+                            if (node.SelectSingleNode("Message") != null)
+                                log.Message = node.SelectSingleNode("Message").InnerText;
+                            else if (node.SelectSingleNode("Entry") != null)
+                                log.Message = node.SelectSingleNode("Entry").InnerText;
+                            if (node.SelectSingleNode("Stacktrace") != null)
+                                log.Stacktrace = node.SelectSingleNode("Stacktrace").InnerText;
+                            if (node.SelectSingleNode("InnerException") != null)
+                            {
+                                XmlNode iex = node.SelectSingleNode("InnerException");
+                                if (iex.SelectSingleNode("Message") != null)
+                                    log.InnerExceptionMessage = iex.SelectSingleNode("Message").InnerText;
+                                if (iex.SelectSingleNode("Stacktrace") != null)
+                                    log.InnerExceptionStacktrace = iex.SelectSingleNode("Stacktrace").InnerText;
+                            }
+                            logs.Add(log);
+
+                            dataGridView1.Rows.Add("ERROR",
+                                                    log.Time,
+                                                    log.ProcessId,
+                                                    log.Namespace,
+                                                    log.Message,
+                                                    log.Stacktrace,
+                                                    log.InnerExceptionMessage,
+                                                    log.InnerExceptionStacktrace);
+                        }
+
+                        //Sort log
+                        dataGridView1.Sort(dataGridView1.Columns["Time"], ListSortDirection.Ascending);
+                        dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+                        //Set Statusbar
+                        LogCountValue.Text = (list.Count + listerror.Count).ToString();
+                        ErrorCountValue.Text = listerror.Count.ToString();
+
+                        //Close log file
+                        reader.Close();
+                        lblFileName.Text = fileName;
+                    }
+                    else
+                    {
+                        MessageBox.Show("A fájl felépítése nem megfelelő. Valószínűleg nem XML fájl.");
+                    }
                 }
-
-                foreach (XmlNode node in listerror)
+                catch (FileNotFoundException fex)
                 {
-                    LogInfo log = new LogInfo();
-                    log.Time = node.Attributes["Time"].Value;
-                    if (node.Attributes["ProcessID"] != null)
-                        log.ProcessId = node.Attributes["ProcessID"].Value;
-                    if (node.SelectSingleNode("Namespace") != null)
-                        log.Namespace = node.SelectSingleNode("Namespace").InnerText;
-                    log.Message = node.SelectSingleNode("Message").InnerText;
-                    if (node.SelectSingleNode("Stacktrace") != null)
-                        log.Stacktrace = node.SelectSingleNode("Stacktrace").InnerText;
-                    logs.Add(log);
-
-                    dataGridView1.Rows.Add("ERROR", log.Time, log.ProcessId, log.Namespace, log.Message, log.Stacktrace);
+                    MessageBox.Show("A fájl nem található");
                 }
-
-                dataGridView1.Sort(dataGridView1.Columns[1],ListSortDirection.Ascending);
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-                LogCountValue.Text = (list.Count + listerror.Count).ToString();
-                ErrorCountValue.Text = listerror.Count.ToString();
-
-                //Close log file
-                reader.Close();
-                lblFileName.Text = fileName;
             }
-            else
+            catch (NullReferenceException nrefex)
             {
-                MessageBox.Show("A fájl felépítése nem megfelelő");
+                MessageBox.Show(nrefex.Message);
+                MessageBox.Show(nrefex.StackTrace);
             }
         }
 
@@ -104,14 +158,14 @@ namespace LogReader
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                OpenFile(Path.GetFileNameWithoutExtension(openFileDialog1.FileName));
+                OpenFile(Path.GetFileName(openFileDialog1.FileName));
             }
         }
 
         private void Form1_ResizeEnd(object sender, EventArgs e)
         {
             dataGridView1.Width = this.Width - 240;
-            dataGridView1.Height = this.Height - 80;
+            dataGridView1.Height = this.Height - 105;
         }
 
         private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -121,7 +175,7 @@ namespace LogReader
             {
                 if (dataGridView1.Rows[i].Cells[0].Value != null && dataGridView1.Rows[i].Cells[0].Value.Equals("ERROR"))
                 {
-                    //dataGridView1.Rows[i].DefaultCellStyle.ForeColor = Color.Red;
+                    //Highlight errors
                     dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255,126,126);
                     dataGridView1.AdvancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
                 }
@@ -137,12 +191,15 @@ namespace LogReader
 
     public class LogInfo
     {
+        //LogNodes for LogInfo and LogErrorInfo
         public string Time = string.Empty;
         public string ProcessId = string.Empty;
         public string Namespace = string.Empty;
         public string Message = string.Empty;
         public string Name = string.Empty;
         public string Stacktrace = string.Empty;
+        public string InnerExceptionMessage = string.Empty;
+        public string InnerExceptionStacktrace = string.Empty;
     }
 
 
