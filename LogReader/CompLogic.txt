@@ -1,0 +1,132 @@
+<LogInfo Time="2013.09.23. 16:00:06">
+  <Message>pageBase.OwnInit hívás. GetPageParameter(TaskID):892bf348-6443-48fc-96d9-7bcb402a2606</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:00:30">
+  <Message>pageBase.OwnInit hívás. GetPageParameter(TaskID):f7359a18-6d55-42e0-93cf-54d942d79a36</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:18" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>Supplement lépés</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:20" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>ENGEDÉLYEZÉS INDULHAT</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:20" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>Process visszaírás </Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:20" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>Process visszaírva</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:36">
+  <Message>Complaint_WS.asmx, Comp_SM_UpdateRequest method called: SMID:1dc53724-4b00-4f1c-97e3-1505538fdea9, MinimusID:E4E70477-CE67-4639-B60E-35566B9612E5, User:SKOVACSDEV\Administrator, OwnerGroup:SYS_CRM, Status:INPROG, EffectiveDate:2013.09.23. 15:16:07, Worklogs:<WorkLogs><WorkLog><WorkLogID>31415926535</WorkLogID><CreatedBy>SKOVACSDEV\Administrator</CreatedBy><Description>Short</Description><LongDescription>Long</LongDescription><SiteID>TNCO_TNHUN</SiteID></WorkLog></WorkLogs></Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:36">
+  <Message>Formai ellenorzések: OK</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:36">
+  <Message>WorkflowAdminUser OK</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:36">
+  <Message>Process OK</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:36">
+  <Message>SYS_CRM tulajdonos</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:36">
+  <Message>INPROG státusz</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:36">
+  <Message>SM Státusz: Folyamatban</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:36">
+  <Message>Process visszaírva</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:46" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>Kiegészítő információk kérése lépés</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:46" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>Adatok processbe mentése befejeződött</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:46" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>SMSupplementTask létrehozása</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:46" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>Adatok mentése az új taszkba</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:46" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>Taszk lezárása</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:46" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>ENGEDÉLYEZÉS INDULHAT</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:46" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>Process visszaírás </Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:01:46" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>Process visszaírva</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:14:29">
+  <Message>pageBase.OwnInit hívás. GetPageParameter(TaskID):8496ccb4-0927-4e6c-b8df-ad338e447001</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:14:46">
+  <Message>pageBase.OwnInit hívás. GetPageParameter(TaskID):f7359a18-6d55-42e0-93cf-54d942d79a36</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:08" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>Supplement lépés</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:12" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>ENGEDÉLYEZÉS INDULHAT</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:12" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>Process visszaírás </Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:12" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>Process visszaírva</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:23">
+  <Message>Complaint_WS.asmx, Comp_SM_UpdateRequest method called: SMID:1dc53724-4b00-4f1c-97e3-1505538fdea9, MinimusID:E4E70477-CE67-4639-B60E-35566B9612E5, User:SKOVACSDEV\Administrator, OwnerGroup:SYS_CRM, Status:INPROG, EffectiveDate:2013.09.23. 16:15:19, Worklogs:<WorkLogs><WorkLog><WorkLogID>31415926535</WorkLogID><CreatedBy>SKOVACSDEV\Administrator</CreatedBy><Description>Short</Description><LongDescription>Long</LongDescription><SiteID>TNCO_TNHUN</SiteID></WorkLog></WorkLogs></Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:23">
+  <Message>Formai ellenorzések: OK</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:23">
+  <Message>WorkflowAdminUser OK</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:23">
+  <Message>Process OK</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:23">
+  <Message>SYS_CRM tulajdonos</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:23">
+  <Message>INPROG státusz</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:23">
+  <Message>SM Státusz: Folyamatban</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:23">
+  <Message>Process visszaírva</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:27" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>Kiegészítő információk kérése lépés</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:27" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>Adatok processbe mentése befejeződött</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:27" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>SMSupplementTask létrehozása</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:27" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>Adatok mentése az új taszkba</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:28" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>Taszk lezárása</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:28" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>ENGEDÉLYEZÉS INDULHAT</Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:28" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>Process visszaírás </Message>
+</LogInfo>
+<LogInfo Time="2013.09.23. 16:15:28" ProcessID="e4e70477-ce67-4639-b60e-35566b9612e5">
+  <Message>Process visszaírva</Message>
+</LogInfo>
