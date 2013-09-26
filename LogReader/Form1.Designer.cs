@@ -38,7 +38,8 @@
             this.lblErrorCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.ErrorCountValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.filesListBox = new System.Windows.Forms.ListBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.tbSearchValue = new System.Windows.Forms.TextBox();
+            this.cbSearchParam = new System.Windows.Forms.ComboBox();
             this.Error = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ProcessId = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -134,12 +135,21 @@
             this.filesListBox.TabIndex = 5;
             this.filesListBox.SelectedIndexChanged += new System.EventHandler(this.filesListBox_SelectedIndexChanged);
             // 
-            // textBox1
+            // tbSearchValue
             // 
-            this.textBox1.Location = new System.Drawing.Point(884, 12);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(257, 20);
-            this.textBox1.TabIndex = 6;
+            this.tbSearchValue.Location = new System.Drawing.Point(884, 12);
+            this.tbSearchValue.Name = "tbSearchValue";
+            this.tbSearchValue.Size = new System.Drawing.Size(257, 20);
+            this.tbSearchValue.TabIndex = 6;
+            this.tbSearchValue.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tbSearchValue_KeyUp);
+            // 
+            // cbSearchParam
+            // 
+            this.cbSearchParam.FormattingEnabled = true;
+            this.cbSearchParam.Location = new System.Drawing.Point(728, 12);
+            this.cbSearchParam.Name = "cbSearchParam";
+            this.cbSearchParam.Size = new System.Drawing.Size(150, 21);
+            this.cbSearchParam.TabIndex = 7;
             // 
             // Error
             // 
@@ -197,7 +207,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1153, 615);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.cbSearchParam);
+            this.Controls.Add(this.tbSearchValue);
             this.Controls.Add(this.filesListBox);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.button2);
@@ -225,7 +236,8 @@
         private System.Windows.Forms.ToolStripStatusLabel ErrorCountValue;
         private System.Windows.Forms.ListBox filesListBox;
         private System.Windows.Forms.ToolStripStatusLabel lblFileName;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox tbSearchValue;
+        private System.Windows.Forms.ComboBox cbSearchParam;
         private System.Windows.Forms.DataGridViewTextBoxColumn Error;
         private System.Windows.Forms.DataGridViewTextBoxColumn Time;
         private System.Windows.Forms.DataGridViewTextBoxColumn ProcessId;
