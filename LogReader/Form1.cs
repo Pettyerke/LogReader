@@ -15,19 +15,19 @@ namespace LogReader
 {
     public partial class Form1 : Form
     {
+        #region Parameters
+
         private string LogPath = ConfigurationSettings.AppSettings["LogPath"] ?? "C:\\Temp\\";
+        private string currentFileName;
         List<LogInfo> logs = new List<LogInfo>();
+
+        #endregion
+
+        #region Functions
 
         public Form1()
         {
-            InitializeComponent();
-
-            //Fill SearchParam ComboBox
-            foreach (DataGridViewColumn column in dataGridView1.Columns)
-            {
-                cbSearchParam.Items.Add(column.Name);
-            }
-            cbSearchParam.SelectedIndex = 2;
+            Init();
 
             try
             {
@@ -37,20 +37,52 @@ namespace LogReader
                                                                   .Where(p => extensions.Contains(p.Extension.ToLower()))
                                                                   .OrderByDescending(p => p.LastWriteTime)
                                                                   .ToArray();
-                
-                //Open the newest file
-                OpenFile(Path.GetFileName(files.First().FullName));
 
-                //Add filenames to ListBox
-                foreach (FileInfo file in files)
+                //Open the newest file
+                OpenFile(files.First().FullName);
+
+                //Fill SearchParam ComboBox
+                cbSearchParam.Items.Clear();
+                foreach (DataGridViewColumn column in dataGridView1.Columns)
                 {
-                    filesListBox.Items.Add(Path.GetFileName(file.FullName));
+                    cbSearchParam.Items.Add(column.Name);
                 }
+                cbSearchParam.SelectedIndex = 2;
             }
             catch
             {
                 MessageBox.Show("Érvénytelen elérési út");
             }
+        }
+
+        private void Init()
+        {
+            InitializeComponent();
+
+            //Init OpenFileDialog
+            openFileDialog1.Multiselect = false;
+            openFileDialog1.Filter = "Log Files (.txt, .log)|*.txt;*.log|All Files (*.*)|*.*";
+
+            //Get the files from directory
+            string[] extensions = new[] { ".txt", ".log" };
+            FileInfo[] files = new DirectoryInfo(LogPath).GetFiles()
+                                                              .Where(p => extensions.Contains(p.Extension.ToLower()))
+                                                              .OrderByDescending(p => p.LastWriteTime)
+                                                              .ToArray();
+
+            //Add filenames to ListBox
+            foreach (FileInfo file in files)
+            {
+                filesListBox.Items.Add(Path.GetFileName(file.FullName));
+            }
+
+            //Init ListBox
+            filesListBox.SelectionMode = SelectionMode.One;
+            filesListBox.HorizontalScrollbar = true;
+            filesListBox.ScrollAlwaysVisible = true;
+
+            dataGridView1.DefaultCellStyle.SelectionBackColor = Color.FromArgb(60, 142, 255);
+            dataGridView1.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
         }
 
         private void Search()
@@ -93,7 +125,7 @@ namespace LogReader
             dataGridView1.Update();
         }
 
-        private void OpenFile(string fileName)
+        private void OpenFile(string fullFileName)
         {
             try
             {
@@ -106,7 +138,7 @@ namespace LogReader
                 //Open the Log file for reading
                 try
                 {
-                    TextReader reader = new StreamReader(File.OpenRead(LogPath + fileName));
+                    TextReader reader = new StreamReader(File.OpenRead(fullFileName));
                     string file = reader.ReadToEnd();
                     if (file.StartsWith("<"))
                     {
@@ -175,7 +207,8 @@ namespace LogReader
 
                         //Close log file
                         reader.Close();
-                        lblFileName.Text = fileName;
+                        currentFileName = fullFileName;
+                        lblFileName.Text = Path.GetFileName(fullFileName);
                     }
                     else
                     {
@@ -194,10 +227,64 @@ namespace LogReader
             }
         }
 
-        private void SaveFile()
+        private void SaveFile(string pFileName)
         {
+            StreamWriter file = new StreamWriter(pFileName);
 
+            foreach (LogInfo log in logs)
+            {
+                string xml = String.Empty;
+                StringBuilder sbuilder = new StringBuilder();
+                using (StringWriter sw = new StringWriter(sbuilder))
+                {
+                    using (XmlTextWriter w = new XmlTextWriter(sw))
+                    {
+                        w.Formatting = Formatting.Indented;
+                        if (log.Error.Equals("ERROR")) {//ERROR
+
+                            w.WriteStartElement("LogErrorInfo");
+                            w.WriteAttributeString("Time", log.Time);
+                            if (!string.IsNullOrEmpty(log.ProcessId)) w.WriteAttributeString("ProcessID", log.ProcessId);
+                            w.WriteElementString("Namespace", log.Namespace);
+                            w.WriteElementString("Name", log.Name);
+                            w.WriteStartElement("Message");
+                            w.WriteRaw(log.Message);
+                            w.WriteEndElement();	//Message
+                            w.WriteElementString("Stacktrace", log.Stacktrace);
+                            if (log.InnerExceptionMessage != null)
+                            {
+                                w.WriteStartElement("InnerException");
+                                w.WriteElementString("Message", log.InnerExceptionMessage);
+                                w.WriteElementString("Stacktrace", log.InnerExceptionStacktrace);
+                                w.WriteEndElement();  //InnerException
+                            }
+                            w.WriteEndElement();  //LogErrorInfo
+
+                        }else {//OK
+
+                            w.WriteStartElement("LogInfo");
+                            w.WriteAttributeString("Time", log.Time);
+                            if (!string.IsNullOrEmpty(log.ProcessId)) w.WriteAttributeString("ProcessID", log.ProcessId);
+                            w.WriteStartElement("Message");
+                            w.WriteRaw(log.Message);
+                            w.WriteEndElement();	//Message
+                            w.WriteEndElement();	//LogInfo
+
+                        }
+                    }
+                }
+                file.WriteLine(sbuilder.ToString());
+
+            }
+            file.Flush();
+            file.Close();
+
+            Init();
         }
+
+        #endregion
+
+        #region EventHandlers
 
         private void Form1_ResizeEnd(object sender, EventArgs e)
         {
@@ -208,22 +295,23 @@ namespace LogReader
 
         private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
-            dataGridView1.DefaultCellStyle.SelectionBackColor = Color.FromArgb(60,142,255);
             for (int i = 0; i < dataGridView1.Rows.Count; i++)
             {
                 if (dataGridView1.Rows[i].Cells[0].Value != null && dataGridView1.Rows[i].Cells[0].Value.Equals("ERROR"))
                 {
                     //Highlight errors
-                    dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255,126,126);
-                    dataGridView1.AdvancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
+                    dataGridView1.Rows[i].ErrorText = "ERROR";
+                    dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255,200,200);
+
                 }
             }
+            dataGridView1.AdvancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
         }
 
         private void filesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (filesListBox.SelectedIndex != -1)
-                OpenFile(filesListBox.SelectedItem.ToString());
+                OpenFile(LogPath + filesListBox.SelectedItem.ToString());
         }
 
         private void tbSearchValue_KeyUp(object sender, KeyEventArgs e)
@@ -236,7 +324,7 @@ namespace LogReader
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                OpenFile(Path.GetFileName(openFileDialog1.FileName));
+                OpenFile(openFileDialog1.FileName);
             }
         }
 
@@ -253,12 +341,30 @@ namespace LogReader
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            SaveFile(currentFileName);
         }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "Log Files (.txt, .log)|*.txt;*.log|All Files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                SaveFile(saveFileDialog1.FileName);
+            }
+        }
+
+        #endregion
     }
 
     public class LogInfo
     {
+        #region LogInfo
+
         //LogNodes for LogInfo and LogErrorInfo
         public string Error { get; set; }
         public string Time { get; set; }
@@ -269,6 +375,8 @@ namespace LogReader
         public string Stacktrace { get; set; }
         public string InnerExceptionMessage { get; set; }
         public string InnerExceptionStacktrace { get; set; }
+
+        #endregion
     }
 
 
