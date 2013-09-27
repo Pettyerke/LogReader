@@ -76,13 +76,7 @@ namespace LogReader
                 filesListBox.Items.Add(Path.GetFileName(file.FullName));
             }
 
-            //Init ListBox
-            filesListBox.SelectionMode = SelectionMode.One;
-            filesListBox.HorizontalScrollbar = true;
-            filesListBox.ScrollAlwaysVisible = true;
-
             dataGridView1.DefaultCellStyle.SelectionBackColor = Color.FromArgb(60, 142, 255);
-            dataGridView1.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
         }
 
         private void Search()
@@ -129,10 +123,6 @@ namespace LogReader
         {
             try
             {
-                //dataGridView1.ScrollBars = ScrollBars.None;
-                //dataGridView1.Rows.Clear();
-                //dataGridView1.ScrollBars = ScrollBars.Both;
-
                 logs.Clear();
 
                 //Open the Log file for reading

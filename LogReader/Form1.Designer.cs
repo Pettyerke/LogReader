@@ -81,6 +81,7 @@
             this.InnerExceptionStacktrace});
             this.dataGridView1.Location = new System.Drawing.Point(211, 42);
             this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.dataGridView1.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridView1.Size = new System.Drawing.Size(930, 550);
             this.dataGridView1.TabIndex = 1;
@@ -225,8 +226,10 @@
             // 
             this.filesListBox.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.filesListBox.FormattingEnabled = true;
+            this.filesListBox.HorizontalScrollbar = true;
             this.filesListBox.Location = new System.Drawing.Point(13, 42);
             this.filesListBox.Name = "filesListBox";
+            this.filesListBox.ScrollAlwaysVisible = true;
             this.filesListBox.Size = new System.Drawing.Size(192, 550);
             this.filesListBox.TabIndex = 10;
             this.filesListBox.SelectedIndexChanged += new System.EventHandler(this.filesListBox_SelectedIndexChanged);
