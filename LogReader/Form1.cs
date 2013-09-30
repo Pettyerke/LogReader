@@ -50,9 +50,9 @@ namespace LogReader
                 }
                 cbSearchParam.SelectedIndex = 2;
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Érvénytelen elérési út");
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -70,6 +70,7 @@ namespace LogReader
             }
 
             dataGridView1.DefaultCellStyle.SelectionBackColor = Color.FromArgb(60, 142, 255);
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
 
         private void Search()
@@ -82,21 +83,21 @@ namespace LogReader
 
                 switch (col)
                 {
-                    case 0: dataGridView1.DataSource = new List<LogInfo>(logs.Where(p => p.Error.Contains(val)).OrderBy(p => p.Time).ToList());
+                    case 0: templogs = new List<LogInfo>(logs.Where(p => p.Error.Contains(val)).OrderBy(p => p.Time).ToList());
                         break;
-                    case 1: dataGridView1.DataSource = new List<LogInfo>(logs.Where(p => p.Time.Contains(val)).OrderBy(p => p.Time).ToList());
+                    case 1: templogs = new List<LogInfo>(logs.Where(p => p.Time.Contains(val)).OrderBy(p => p.Time).ToList());
                         break;
-                    case 2: dataGridView1.DataSource = new List<LogInfo>(logs.Where(p => p.ProcessId.Contains(val)).OrderBy(p => p.Time).ToList());
+                    case 2: templogs = new List<LogInfo>(logs.Where(p => p.ProcessId.Contains(val)).OrderBy(p => p.Time).ToList());
                         break;
-                    case 3: dataGridView1.DataSource = new List<LogInfo>(logs.Where(p => p.Namespace.Contains(val)).OrderBy(p => p.Time).ToList());
+                    case 3: templogs = new List<LogInfo>(logs.Where(p => p.Namespace.Contains(val)).OrderBy(p => p.Time).ToList());
                         break;
-                    case 4: dataGridView1.DataSource = new List<LogInfo>(logs.Where(p => p.Message.Contains(val)).OrderBy(p => p.Time).ToList());
+                    case 4: templogs = new List<LogInfo>(logs.Where(p => p.Message.Contains(val)).OrderBy(p => p.Time).ToList());
                         break;
-                    case 5: dataGridView1.DataSource = new List<LogInfo>(logs.Where(p => p.Stacktrace.Contains(val)).OrderBy(p => p.Time).ToList());
+                    case 5: templogs = new List<LogInfo>(logs.Where(p => p.Stacktrace.Contains(val)).OrderBy(p => p.Time).ToList());
                         break;
-                    case 6: dataGridView1.DataSource = new List<LogInfo>(logs.Where(p => p.InnerExceptionMessage.Contains(val)).OrderBy(p => p.Time).ToList());
+                    case 6: templogs = new List<LogInfo>(logs.Where(p => p.InnerExceptionMessage.Contains(val)).OrderBy(p => p.Time).ToList());
                         break;
-                    case 7: dataGridView1.DataSource = new List<LogInfo>(logs.Where(p => p.InnerExceptionStacktrace.Contains(val)).OrderBy(p => p.Time).ToList());
+                    case 7: templogs = new List<LogInfo>(logs.Where(p => p.InnerExceptionStacktrace.Contains(val)).OrderBy(p => p.Time).ToList());
                         break;
                 }
                 LogCountValue.Text = string.Format("{0} ({1})", templogs.Count, logs.Count);
@@ -108,7 +109,7 @@ namespace LogReader
                 LogCountValue.Text = logs.Count.ToString();
                 ErrorCountValue.Text = logs.Where(p => p.Error.Equals("ERROR")).Count().ToString();
             }
-            //dataGridView1.DataSource = templogs;
+            dataGridView1.DataSource = templogs;
             dataGridView1.Update();
         }
 
@@ -116,6 +117,7 @@ namespace LogReader
         {
             try
             {
+                //Clear previous logs
                 logs.Clear();
 
                 //Open the Log file for reading
@@ -181,8 +183,6 @@ namespace LogReader
 
                         dataGridView1.DataSource = new List<LogInfo>(logs.OrderBy(p => p.Time).ToList());
 
-                        dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-
                         //Set Statusbar
                         LogCountValue.Text = (list.Count + listerror.Count).ToString();
                         ErrorCountValue.Text = logs.Where(p => p.Error.Equals("ERROR")).Count().ToString();
@@ -243,7 +243,6 @@ namespace LogReader
                     //Highlight errors
                     dataGridView1.Rows[i].ErrorText = "ERROR";
                     dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255,200,200);
-
                 }
             }
             dataGridView1.AdvancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.None;
