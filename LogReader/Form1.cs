@@ -17,7 +17,8 @@ namespace LogReader
     {
         #region Parameters
 
-        private static string LogPath = ConfigurationSettings.AppSettings["LogPath"] ?? "C:\\Temp\\";
+
+        private static string LogPath = ConfigurationManager.AppSettings["LogPath"] ?? "C:\\Temp\\MyCampaign\\Logs\\";
         private string currentFileName;
         List<LogInfo> logs = new List<LogInfo>();
 
@@ -87,17 +88,11 @@ namespace LogReader
                         break;
                     case 1: templogs = new List<LogInfo>(logs.Where(p => p.Time.Contains(val)).OrderBy(p => p.Time).ToList());
                         break;
-                    case 2: templogs = new List<LogInfo>(logs.Where(p => p.ProcessId.Contains(val)).OrderBy(p => p.Time).ToList());
+                    case 2: templogs = new List<LogInfo>(logs.Where(p => p.User.Contains(val)).OrderBy(p => p.Time).ToList());
                         break;
-                    case 3: templogs = new List<LogInfo>(logs.Where(p => p.Namespace.Contains(val)).OrderBy(p => p.Time).ToList());
+                    case 3: templogs = new List<LogInfo>(logs.Where(p => p.Message.Contains(val)).OrderBy(p => p.Time).ToList());
                         break;
-                    case 4: templogs = new List<LogInfo>(logs.Where(p => p.Message.Contains(val)).OrderBy(p => p.Time).ToList());
-                        break;
-                    case 5: templogs = new List<LogInfo>(logs.Where(p => p.Stacktrace.Contains(val)).OrderBy(p => p.Time).ToList());
-                        break;
-                    case 6: templogs = new List<LogInfo>(logs.Where(p => p.InnerExceptionMessage.Contains(val)).OrderBy(p => p.Time).ToList());
-                        break;
-                    case 7: templogs = new List<LogInfo>(logs.Where(p => p.InnerExceptionStacktrace.Contains(val)).OrderBy(p => p.Time).ToList());
+                    case 4: templogs = new List<LogInfo>(logs.Where(p => p.Stacktrace.Contains(val)).OrderBy(p => p.Time).ToList());
                         break;
                 }
                 LogCountValue.Text = string.Format("{0} ({1})", templogs.Count, logs.Count);
@@ -141,21 +136,9 @@ namespace LogReader
                             LogInfo log = new LogInfo();
                             log.Error = "OK";
                             log.Time = node.Attributes["Time"].Value;
-                            log.ProcessId = node.Attributes["ProcessID"] != null ? node.Attributes["ProcessID"].Value : string.Empty;
-                            log.Namespace = node.SelectSingleNode("Namespace") != null ? node.SelectSingleNode("Namespace").InnerText : string.Empty;
-                            if (node.SelectSingleNode("Entry") != null)
-                                log.Message = node.SelectSingleNode("Entry") != null ? node.SelectSingleNode("Entry").InnerText : string.Empty;
-                            else
-                                log.Message = node.SelectSingleNode("Message") != null ? node.SelectSingleNode("Message").InnerText : string.Empty;
+                            log.User = node.Attributes["User"].Value;
+                            log.Message = node.SelectSingleNode("Message") != null ? node.SelectSingleNode("Message").InnerText : string.Empty;
                             log.Stacktrace = node.SelectSingleNode("Stacktrace") != null ? node.SelectSingleNode("Stacktrace").InnerText : string.Empty;
-                            if (node.SelectSingleNode("InnerException") != null)
-                            {
-                                XmlNode iex = node.SelectSingleNode("InnerException");
-                                log.InnerExceptionMessage = node.SelectSingleNode("Message") != null ? node.SelectSingleNode("Message").InnerText : string.Empty;
-                                log.InnerExceptionStacktrace = node.SelectSingleNode("Stacktrace") != null ? node.SelectSingleNode("Stacktrace").InnerText : string.Empty;
-                            }
-                            if (log.Message.Contains("was thrown an Exception"))
-                                log.Error = "ERROR";
                             logs.Add(log);
                         }
 
@@ -165,19 +148,9 @@ namespace LogReader
                             LogInfo log = new LogInfo();
                             log.Error = "ERROR";
                             log.Time = node.Attributes["Time"].Value;
-                            log.ProcessId = node.Attributes["ProcessID"] != null ? node.Attributes["ProcessID"].Value : string.Empty;
-                            log.Namespace = node.SelectSingleNode("Namespace") != null ? node.SelectSingleNode("Namespace").InnerText : string.Empty;
-                            if (node.SelectSingleNode("Entry") != null)
-                                log.Message = node.SelectSingleNode("Entry") != null ? node.SelectSingleNode("Entry").InnerText : string.Empty;
-                            else
-                                log.Message = node.SelectSingleNode("Message") != null ? node.SelectSingleNode("Message").InnerText : string.Empty;
+                            log.User = node.Attributes["User"].Value;
+                            log.Message = node.SelectSingleNode("Message") != null ? node.SelectSingleNode("Message").InnerText : string.Empty;
                             log.Stacktrace = node.SelectSingleNode("Stacktrace") != null ? node.SelectSingleNode("Stacktrace").InnerText : string.Empty;
-                            if (node.SelectSingleNode("InnerException") != null)
-                            {
-                                XmlNode iex = node.SelectSingleNode("InnerException");
-                                log.InnerExceptionMessage = node.SelectSingleNode("Message") != null ? node.SelectSingleNode("Message").InnerText : string.Empty;
-                                log.InnerExceptionStacktrace = node.SelectSingleNode("Stacktrace") != null ? node.SelectSingleNode("Stacktrace").InnerText : string.Empty;
-                            }
                             logs.Add(log);
                         }
 
@@ -313,13 +286,9 @@ namespace LogReader
         //LogNodes for LogInfo and LogErrorInfo
         public string Error { get; set; }
         public string Time { get; set; }
-        public string ProcessId { get; set; }
-        public string Namespace { get; set; }
+        public string User { get; set; }
         public string Message { get; set; }
-        public string Name { get; set; }
         public string Stacktrace { get; set; }
-        public string InnerExceptionMessage { get; set; }
-        public string InnerExceptionStacktrace { get; set; }
 
         public override string ToString()
         {
@@ -335,20 +304,11 @@ namespace LogReader
 
                         w.WriteStartElement("LogErrorInfo");
                         w.WriteAttributeString("Time", this.Time);
-                        if (!string.IsNullOrEmpty(this.ProcessId)) w.WriteAttributeString("ProcessID", this.ProcessId);
-                        w.WriteElementString("Namespace", this.Namespace);
-                        w.WriteElementString("Name", this.Name);
+                        w.WriteAttributeString("User", this.User);
                         w.WriteStartElement("Message");
                         w.WriteRaw(this.Message);
                         w.WriteEndElement();	//Message
                         w.WriteElementString("Stacktrace", this.Stacktrace);
-                        if (this.InnerExceptionMessage != null)
-                        {
-                            w.WriteStartElement("InnerException");
-                            w.WriteElementString("Message", this.InnerExceptionMessage);
-                            w.WriteElementString("Stacktrace", this.InnerExceptionStacktrace);
-                            w.WriteEndElement();  //InnerException
-                        }
                         w.WriteEndElement();  //LogErrorInfo
 
                     }
@@ -357,7 +317,7 @@ namespace LogReader
 
                         w.WriteStartElement("LogInfo");
                         w.WriteAttributeString("Time", this.Time);
-                        if (!string.IsNullOrEmpty(this.ProcessId)) w.WriteAttributeString("ProcessID", this.ProcessId);
+                        w.WriteAttributeString("User", this.User);
                         w.WriteStartElement("Message");
                         w.WriteRaw(this.Message);
                         w.WriteEndElement();	//Message

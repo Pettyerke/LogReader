@@ -51,14 +51,11 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.label1 = new System.Windows.Forms.Label();
             this.filesListBox = new System.Windows.Forms.ListBox();
-            this.InnerExceptionStacktrace = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.InnerExceptionMessage = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Stacktrace = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Message = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Namespace = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ProcessId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Error = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.User = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Message = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Stacktrace = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -72,13 +69,10 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Error,
+            this.User,
             this.Time,
-            this.ProcessId,
-            this.Namespace,
             this.Message,
-            this.Stacktrace,
-            this.InnerExceptionMessage,
-            this.InnerExceptionStacktrace});
+            this.Stacktrace});
             this.dataGridView1.Location = new System.Drawing.Point(211, 42);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
@@ -173,28 +167,28 @@
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.openFileToolStripMenuItem.Text = "Open file";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.saveAsToolStripMenuItem.Text = "Save As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.quitToolStripMenuItem.Text = "Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
@@ -209,7 +203,7 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -234,49 +228,6 @@
             this.filesListBox.TabIndex = 10;
             this.filesListBox.SelectedIndexChanged += new System.EventHandler(this.filesListBox_SelectedIndexChanged);
             // 
-            // InnerExceptionStacktrace
-            // 
-            this.InnerExceptionStacktrace.DataPropertyName = "InnerExceptionStacktrace";
-            this.InnerExceptionStacktrace.HeaderText = "InnerExceptionStacktrace";
-            this.InnerExceptionStacktrace.Name = "InnerExceptionStacktrace";
-            // 
-            // InnerExceptionMessage
-            // 
-            this.InnerExceptionMessage.DataPropertyName = "InnerExceptionMessage";
-            this.InnerExceptionMessage.HeaderText = "InnerExceptionMessage";
-            this.InnerExceptionMessage.Name = "InnerExceptionMessage";
-            // 
-            // Stacktrace
-            // 
-            this.Stacktrace.DataPropertyName = "Stacktrace";
-            this.Stacktrace.HeaderText = "Stacktrace";
-            this.Stacktrace.Name = "Stacktrace";
-            // 
-            // Message
-            // 
-            this.Message.DataPropertyName = "Message";
-            this.Message.HeaderText = "Message";
-            this.Message.Name = "Message";
-            // 
-            // Namespace
-            // 
-            this.Namespace.DataPropertyName = "Namespace";
-            this.Namespace.HeaderText = "Namespace";
-            this.Namespace.Name = "Namespace";
-            // 
-            // ProcessId
-            // 
-            this.ProcessId.DataPropertyName = "ProcessId";
-            this.ProcessId.HeaderText = "ProcessId";
-            this.ProcessId.Name = "ProcessId";
-            // 
-            // Time
-            // 
-            this.Time.DataPropertyName = "Time";
-            this.Time.DividerWidth = 2;
-            this.Time.HeaderText = "Time";
-            this.Time.Name = "Time";
-            // 
             // Error
             // 
             this.Error.DataPropertyName = "Error";
@@ -285,6 +236,31 @@
             this.Error.ReadOnly = true;
             this.Error.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.Error.Visible = false;
+            // 
+            // User
+            // 
+            this.User.DataPropertyName = "User";
+            this.User.HeaderText = "User";
+            this.User.Name = "User";
+            // 
+            // Time
+            // 
+            this.Time.DataPropertyName = "Time";
+            this.Time.DividerWidth = 2;
+            this.Time.HeaderText = "Time";
+            this.Time.Name = "Time";
+            // 
+            // Message
+            // 
+            this.Message.DataPropertyName = "Message";
+            this.Message.HeaderText = "Message";
+            this.Message.Name = "Message";
+            // 
+            // Stacktrace
+            // 
+            this.Stacktrace.DataPropertyName = "Stacktrace";
+            this.Stacktrace.HeaderText = "Stacktrace";
+            this.Stacktrace.Name = "Stacktrace";
             // 
             // Form1
             // 
@@ -338,13 +314,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox filesListBox;
         private System.Windows.Forms.DataGridViewTextBoxColumn Error;
+        private System.Windows.Forms.DataGridViewTextBoxColumn User;
         private System.Windows.Forms.DataGridViewTextBoxColumn Time;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ProcessId;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Namespace;
         private System.Windows.Forms.DataGridViewTextBoxColumn Message;
         private System.Windows.Forms.DataGridViewTextBoxColumn Stacktrace;
-        private System.Windows.Forms.DataGridViewTextBoxColumn InnerExceptionMessage;
-        private System.Windows.Forms.DataGridViewTextBoxColumn InnerExceptionStacktrace;
     }
 }
 
